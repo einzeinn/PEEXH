@@ -7,6 +7,7 @@ This is not a replacement for Git history or RFCs.
 ## Unreleased
 
 ### Added
+- Drafted RFC-004 for Phase 3 confirmation UX and user-controlled communication output.
 - Initial PEEXH product definition.
 - Dysarthria-focused primary persona.
 - Everyday face-to-face communication as primary use case.
@@ -41,5 +42,6 @@ This is not a replacement for Git history or RFCs.
   - Updated frontend `useSpeechStream` and `TranscriptView` to display real-time interpretation cards.
   - Added full test suite with 26 passing tests across models, scorers, interpreters, and WebSocket streams.
 
-
+### Changed
+- Hardened RFC-003 high-confidence policy: a phrase proposal now requires the configured top-candidate threshold and a separately configurable minimum STT confidence, preventing memory or composite-score bonuses from bypassing either safeguard.
 

@@ -52,6 +52,40 @@ def test_medium_confidence_shows_candidates(scorer: ConfidenceScorer):
     assert len(decision.candidates) == 2
 
 
+def test_high_confidence_requires_strong_stt_evidence(scorer: ConfidenceScorer):
+    """Verify a confident interpretation cannot bypass the minimum STT safeguard."""
+    interp = InterpretationResult(
+        raw_transcript="need water",
+        stt_confidence=0.49,
+        candidates=[
+            PhraseCandidate(text="I need water", confidence=0.95),
+            PhraseCandidate(text="I need to wait", confidence=0.30),
+        ],
+    )
+
+    decision = scorer.score_and_decide(interp, has_memory_match=True)
+
+    assert decision.action == AgentAction.SHOW_CANDIDATES
+    assert decision.confidence_level == ConfidenceLevel.MEDIUM
+
+
+def test_high_confidence_requires_top_candidate_threshold(scorer: ConfidenceScorer):
+    """Verify a high composite score cannot elevate a weak top candidate."""
+    interp = InterpretationResult(
+        raw_transcript="need water",
+        stt_confidence=1.0,
+        candidates=[
+            PhraseCandidate(text="I need water", confidence=0.79),
+            PhraseCandidate(text="I need to wait", confidence=0.20),
+        ],
+    )
+
+    decision = scorer.score_and_decide(interp, has_memory_match=True)
+
+    assert decision.action == AgentAction.SHOW_CANDIDATES
+    assert decision.confidence_level == ConfidenceLevel.MEDIUM
+
+
 def test_low_confidence_requests_repeat(scorer: ConfidenceScorer):
     """Verify weak candidate scores yield LOW confidence and REQUEST_REPEAT action without guessing."""
     interp = InterpretationResult(

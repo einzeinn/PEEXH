@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     # Deterministic Confidence Policy Thresholds
     PEEXH_HIGH_CONFIDENCE_THRESHOLD: float = 0.80
     PEEXH_LOW_CONFIDENCE_THRESHOLD: float = 0.45
+    PEEXH_MIN_STT_CONFIDENCE_FOR_HIGH: float = 0.50
 
     # Feature Flags
     ENABLE_PERSONAL_MEMORY: bool = True

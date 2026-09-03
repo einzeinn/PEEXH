@@ -27,6 +27,7 @@ class PeexhAgent:
         self.scorer = scorer or ConfidenceScorer(
             high_threshold=cfg.PEEXH_HIGH_CONFIDENCE_THRESHOLD,
             low_threshold=cfg.PEEXH_LOW_CONFIDENCE_THRESHOLD,
+            min_stt_confidence_for_high=cfg.PEEXH_MIN_STT_CONFIDENCE_FOR_HIGH,
         )
         self._state: AgentState = AgentState.IDLE
 

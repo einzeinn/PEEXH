@@ -17,6 +17,7 @@ class ConfidenceScorer:
         self,
         high_threshold: Optional[float] = None,
         low_threshold: Optional[float] = None,
+        min_stt_confidence_for_high: Optional[float] = None,
     ) -> None:
         self.high_threshold = (
             high_threshold
@@ -27,6 +28,11 @@ class ConfidenceScorer:
             low_threshold
             if low_threshold is not None
             else settings.PEEXH_LOW_CONFIDENCE_THRESHOLD
+        )
+        self.min_stt_confidence_for_high = (
+            min_stt_confidence_for_high
+            if min_stt_confidence_for_high is not None
+            else settings.PEEXH_MIN_STT_CONFIDENCE_FOR_HIGH
         )
 
     def score_and_decide(
@@ -84,7 +90,14 @@ class ConfidenceScorer:
         composite_score = round(max(0.0, min(1.0, composite)), 2)
 
         # 3. Classify into deterministic tiers
-        if composite_score >= self.high_threshold and model_conf >= 0.70:
+        # A high-confidence proposal needs strong independent evidence from both
+        # transcription and interpretation. A memory match may raise the composite
+        # score, but it must not bypass either safeguard.
+        if (
+            composite_score >= self.high_threshold
+            and model_conf >= self.high_threshold
+            and stt_conf >= self.min_stt_confidence_for_high
+        ):
             return AgentDecision(
                 action=AgentAction.PROPOSE_PHRASE,
                 confidence_level=ConfidenceLevel.HIGH,
