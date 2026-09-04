@@ -2,7 +2,7 @@
 
 from enum import Enum
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class ConfidenceLevel(str, Enum):
@@ -44,3 +44,56 @@ class AgentDecision(BaseModel):
     primary_phrase: Optional[str] = None
     candidates: List[PhraseCandidate] = Field(default_factory=list)
     reason: str = ""
+
+
+# --- RFC-004 Confirmation UX Models ---
+
+class ConfirmedPhraseSource(str, Enum):
+    """Source of a confirmed communication phrase."""
+    PROPOSAL = "proposal"
+    CANDIDATE = "candidate"
+    CORRECTION = "correction"
+
+
+class ConfirmProposalMessage(BaseModel):
+    """Client request to confirm the primary proposed phrase."""
+    type: Literal["confirm_proposal"] = "confirm_proposal"
+
+
+class SelectCandidateMessage(BaseModel):
+    """Client request to select one candidate from the decision list."""
+    type: Literal["select_candidate"] = "select_candidate"
+    phrase: str
+
+
+class SubmitCorrectionMessage(BaseModel):
+    """Client request to submit a manually typed or corrected phrase."""
+    type: Literal["submit_correction"] = "submit_correction"
+    phrase: str = Field(..., min_length=1, max_length=500)
+
+    @field_validator("phrase")
+    @classmethod
+    def validate_phrase(cls, v: str) -> str:
+        stripped = v.strip()
+        if not stripped:
+            raise ValueError("Phrase must not be empty or whitespace only")
+        if len(stripped) > 500:
+            raise ValueError("Phrase must not exceed 500 characters")
+        return stripped
+
+
+class RequestRepeatMessage(BaseModel):
+    """Client request to abandon current decision and prompt to speak again."""
+    type: Literal["request_repeat"] = "request_repeat"
+
+
+class CommunicationReadyEvent(BaseModel):
+    """Event emitted when a phrase has been verified and is ready to communicate."""
+    type: Literal["communication_ready"] = "communication_ready"
+    phrase: str
+    source: ConfirmedPhraseSource
+
+
+class RepeatRequestedEvent(BaseModel):
+    """Event confirming that the active decision was cleared and repeat requested."""
+    type: Literal["repeat_requested"] = "repeat_requested"

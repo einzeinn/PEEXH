@@ -14,6 +14,15 @@ export type AgentAction =
   | "COMMUNICATE"
   | "LEARN_CORRECTION";
 
+export type ConfirmedPhraseSource = "proposal" | "candidate" | "correction";
+
+export type ConfirmationStatus =
+  | "idle"
+  | "awaiting"
+  | "pending"
+  | "confirmed"
+  | "repeat_requested";
+
 export interface PhraseCandidate {
   text: string;
   confidence: number;
@@ -30,6 +39,16 @@ export interface AgentDecision {
   reason: string;
 }
 
+export interface CommunicationReadyEvent {
+  type: "communication_ready";
+  phrase: string;
+  source: ConfirmedPhraseSource;
+}
+
+export interface RepeatRequestedEvent {
+  type: "repeat_requested";
+}
+
 export interface SpeechStreamState {
   status: StreamStatus;
   partialTranscript: string;
@@ -39,6 +58,10 @@ export interface SpeechStreamState {
   sessionId: string | null;
   provider: string | null;
   agentDecision: AgentDecision | null;
+  confirmationStatus: ConfirmationStatus;
+  confirmedPhrase: string | null;
+  confirmedSource: ConfirmedPhraseSource | null;
+  confirmPending: boolean;
 }
 
 export function useSpeechStream() {
@@ -51,6 +74,10 @@ export function useSpeechStream() {
     sessionId: null,
     provider: null,
     agentDecision: null,
+    confirmationStatus: "idle",
+    confirmedPhrase: null,
+    confirmedSource: null,
+    confirmPending: false,
   });
 
   const wsRef = useRef<WebSocket | null>(null);
@@ -88,7 +115,55 @@ export function useSpeechStream() {
     cleanupAudio();
   }, [cleanupAudio]);
 
+  const confirmProposal = useCallback(() => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      setState((prev) => ({ ...prev, confirmPending: true, error: null }));
+      wsRef.current.send(JSON.stringify({ type: "confirm_proposal" }));
+    }
+  }, []);
+
+  const selectCandidate = useCallback((phrase: string) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      setState((prev) => ({ ...prev, confirmPending: true, error: null }));
+      wsRef.current.send(JSON.stringify({ type: "select_candidate", phrase }));
+    }
+  }, []);
+
+  const submitCorrection = useCallback((phrase: string) => {
+    const trimmed = phrase.trim();
+    if (!trimmed) return;
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      setState((prev) => ({ ...prev, confirmPending: true, error: null }));
+      wsRef.current.send(JSON.stringify({ type: "submit_correction", phrase: trimmed }));
+    }
+  }, []);
+
+  const requestRepeat = useCallback(() => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      setState((prev) => ({ ...prev, confirmPending: true, error: null }));
+      wsRef.current.send(JSON.stringify({ type: "request_repeat" }));
+    }
+  }, []);
+
+  const resetConfirmation = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      confirmationStatus: "idle",
+      confirmedPhrase: null,
+      confirmedSource: null,
+      agentDecision: null,
+      confirmPending: false,
+    }));
+  }, []);
+
   const startRecording = useCallback(async () => {
+    // Clean up any existing connection before starting fresh session
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    cleanupAudio();
+
     setState({
       status: "connecting",
       partialTranscript: "",
@@ -98,6 +173,10 @@ export function useSpeechStream() {
       sessionId: null,
       provider: null,
       agentDecision: null,
+      confirmationStatus: "idle",
+      confirmedPhrase: null,
+      confirmedSource: null,
+      confirmPending: false,
     });
 
     try {
@@ -185,19 +264,35 @@ export function useSpeechStream() {
             setState((prev) => ({
               ...prev,
               agentDecision: data,
+              confirmationStatus: "awaiting",
+              confirmPending: false,
             }));
-            // After receiving decision, close connection cleanly
-            if (wsRef.current) {
-              wsRef.current.close();
-              wsRef.current = null;
-            }
+            // Keep WebSocket connection open for user confirmation action (RFC-004)
+          } else if (data.type === "communication_ready") {
+            setState((prev) => ({
+              ...prev,
+              confirmationStatus: "confirmed",
+              confirmedPhrase: data.phrase,
+              confirmedSource: data.source,
+              confirmPending: false,
+            }));
+          } else if (data.type === "repeat_requested") {
+            setState((prev) => ({
+              ...prev,
+              confirmationStatus: "repeat_requested",
+              agentDecision: null,
+              confirmPending: false,
+            }));
           } else if (data.type === "error") {
             setState((prev) => ({
               ...prev,
-              status: "error",
+              status: prev.status === "connecting" ? "error" : prev.status,
               error: data.message || "Speech transcription error",
+              confirmPending: false,
             }));
-            cleanupAudio();
+            if (prevStatusNeedsCleanup(data.code)) {
+              cleanupAudio();
+            }
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -209,6 +304,7 @@ export function useSpeechStream() {
           ...prev,
           status: "error",
           error: "WebSocket connection error. Is the backend running?",
+          confirmPending: false,
         }));
         cleanupAudio();
       };
@@ -216,9 +312,9 @@ export function useSpeechStream() {
       ws.onclose = () => {
         setState((prev) => {
           if (prev.status !== "error") {
-            return { ...prev, status: "idle" };
+            return { ...prev, status: "idle", confirmPending: false };
           }
-          return prev;
+          return { ...prev, confirmPending: false };
         });
         cleanupAudio();
       };
@@ -229,6 +325,7 @@ export function useSpeechStream() {
         ...prev,
         status: "error",
         error: message,
+        confirmPending: false,
       }));
       cleanupAudio();
     }
@@ -247,5 +344,15 @@ export function useSpeechStream() {
     ...state,
     startRecording,
     stopRecording,
+    confirmProposal,
+    selectCandidate,
+    submitCorrection,
+    requestRepeat,
+    resetConfirmation,
   };
+}
+
+function prevStatusNeedsCleanup(code?: string): boolean {
+  // If it's a confirmation error, we keep audio/ws intact
+  return code !== "INVALID_AGENT_STATE" && code !== "INVALID_CONTROL_MESSAGE";
 }

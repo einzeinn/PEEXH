@@ -6,9 +6,15 @@ from typing import Optional
 import uuid
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
-from app.agent.orchestrator import PeexhAgent
+from app.agent.orchestrator import InvalidStateError, PeexhAgent
 from app.assemblyai.factory import get_speech_transcriber
 from app.core.config import settings
+from app.models.agent import (
+    ConfirmProposalMessage,
+    RequestRepeatMessage,
+    SelectCandidateMessage,
+    SubmitCorrectionMessage,
+)
 from app.models.speech import (
     ErrorEvent,
     SessionStartedEvent,
@@ -105,6 +111,37 @@ async def speech_websocket_endpoint(websocket: WebSocket):
                         )
                         await websocket.send_text(decision.model_dump_json())
 
+                    elif msg_type == "confirm_proposal":
+                        _ = ConfirmProposalMessage.model_validate(data)
+                        ready_event = agent.confirm_proposal()
+                        await websocket.send_text(ready_event.model_dump_json())
+
+                    elif msg_type == "select_candidate":
+                        cand_msg = SelectCandidateMessage.model_validate(data)
+                        ready_event = agent.select_candidate(cand_msg.phrase)
+                        await websocket.send_text(ready_event.model_dump_json())
+
+                    elif msg_type == "submit_correction":
+                        corr_msg = SubmitCorrectionMessage.model_validate(data)
+                        ready_event = agent.submit_correction(corr_msg.phrase)
+                        await websocket.send_text(ready_event.model_dump_json())
+
+                    elif msg_type == "request_repeat":
+                        _ = RequestRepeatMessage.model_validate(data)
+                        repeat_event = agent.request_repeat()
+                        await websocket.send_text(repeat_event.model_dump_json())
+
+                    else:
+                        raise ValueError(f"Unknown message type: {msg_type}")
+
+                except InvalidStateError as state_exc:
+                    logger.warning(f"Invalid state for confirmation message: {state_exc}")
+                    err_event = ErrorEvent(
+                        message=str(state_exc),
+                        code="INVALID_AGENT_STATE",
+                    )
+                    await websocket.send_text(err_event.model_dump_json())
+
                 except Exception as parse_exc:
                     logger.error(f"Error handling control message: {parse_exc}")
                     err_event = ErrorEvent(
@@ -122,6 +159,7 @@ async def speech_websocket_endpoint(websocket: WebSocket):
     except Exception as exc:
         logger.error(f"Unexpected error in speech WebSocket: {exc}")
     finally:
+        agent.reset()
         if transcriber:
             try:
                 await transcriber.stop()

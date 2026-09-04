@@ -35,7 +35,7 @@ class AssemblyAITranscriber(SpeechTranscriber):
         headers = {"Authorization": self.api_key}
 
         try:
-            self._ws = await websockets.connect(url, extra_headers=headers)
+            self._ws = await websockets.connect(url, additional_headers=headers)
             self._is_active = True
             self._receive_task = asyncio.create_task(self._listen_loop())
             logger.info("Connected to AssemblyAI Realtime WebSocket")

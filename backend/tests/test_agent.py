@@ -19,7 +19,7 @@ async def test_agent_process_high_confidence_phrase():
 
     assert decision.action == AgentAction.PROPOSE_PHRASE
     assert decision.confidence_level == ConfidenceLevel.HIGH
-    assert decision.primary_phrase == "I need some water"
+    assert decision.primary_phrase == "I need water"
     assert agent.state == AgentState.AWAITING_CONFIRMATION
 
 
@@ -34,7 +34,9 @@ async def test_agent_process_low_confidence_phrase():
 
     assert decision.action == AgentAction.REQUEST_REPEAT
     assert decision.confidence_level == ConfidenceLevel.LOW
-    assert agent.state == AgentState.IDLE
+    # RFC-004 invariant: all agent decisions → AWAITING_CONFIRMATION, never IDLE.
+    # Only an explicit request_repeat user message returns agent to IDLE.
+    assert agent.state == AgentState.AWAITING_CONFIRMATION
 
 
 def test_agent_reset():

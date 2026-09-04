@@ -5,6 +5,7 @@ import { CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 import { useSpeechStream } from "@/hooks/useSpeechStream";
 import { TapToTalkButton } from "@/components/speech/TapToTalkButton";
 import { TranscriptView } from "@/components/speech/TranscriptView";
+import { ConfirmedMessageView } from "@/components/speech/ConfirmedMessageView";
 
 interface BackendHealth {
   status: string;
@@ -25,8 +26,16 @@ export default function HomePage() {
     error: speechError,
     provider,
     agentDecision,
+    confirmationStatus,
+    confirmedPhrase,
+    confirmedSource,
+    confirmPending,
     startRecording,
     stopRecording,
+    confirmProposal,
+    selectCandidate,
+    submitCorrection,
+    requestRepeat,
   } = useSpeechStream();
 
 
@@ -79,7 +88,16 @@ export default function HomePage() {
         aria-label="Speech communication area"
         className="flex flex-col items-center gap-8"
       >
-        {/* Realtime Transcript Display */}
+        {/* Confirmed Communication Output View */}
+        {confirmationStatus === "confirmed" && confirmedPhrase && (
+          <ConfirmedMessageView
+            phrase={confirmedPhrase}
+            source={confirmedSource}
+            onStartNew={startRecording}
+          />
+        )}
+
+        {/* Realtime Transcript & Decision Controls Display */}
         <TranscriptView
           status={status}
           partialTranscript={partialTranscript}
@@ -88,8 +106,13 @@ export default function HomePage() {
           error={speechError}
           provider={provider}
           agentDecision={agentDecision}
+          confirmationStatus={confirmationStatus}
+          confirmPending={confirmPending}
+          onConfirmProposal={confirmProposal}
+          onSelectCandidate={selectCandidate}
+          onSubmitCorrection={submitCorrection}
+          onRequestRepeat={requestRepeat}
         />
-
 
         {/* Primary Accessible Tap-to-Talk Action */}
         <TapToTalkButton
