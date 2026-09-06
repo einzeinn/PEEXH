@@ -42,6 +42,26 @@ This is not a replacement for Git history or RFCs.
   - Updated frontend `useSpeechStream` and `TranscriptView` to display real-time interpretation cards.
   - Added full test suite with 26 passing tests across models, scorers, interpreters, and WebSocket streams.
 
+- Completed RFC-004 Confirmation UX and Communication Output:
+  - Added typed confirmation domain models and WebSocket control events (`app.models.agent`).
+  - Extended `PeexhAgent` with `confirm_proposal`, `select_candidate`, `submit_correction`, and `request_repeat` methods with `InvalidStateError` enforcement.
+  - Preserved streaming WebSocket connection after `agent_decision` to await explicit user confirmation actions.
+  - Replaced preview-only UI with accessible decision controls (`PROPOSE_PHRASE`, `SHOW_CANDIDATES`, `REQUEST_REPEAT`) and inline correction form in `TranscriptView`.
+  - Created `ConfirmedMessageView` with large-text display, browser `SpeechSynthesis` TTS with replay control, and new message initialization.
+  - Expanded test suite to 43 passing tests and verified clean Next.js production build.
+- Completed RFC-005 Personal Speech Memory and Adaptive Learning Loop:
+  - Implemented PostgreSQL schema migration for Supabase (`speech_corrections`, `phrase_frequencies`).
+  - Created `MemoryStore` abstraction with `SupabaseMemoryStore` (cloud persistence) and `MockMemoryStore` (in-memory fallback).
+  - Integrated memory-aware prompt injection into `CloudLLMInterpreter` and `MockInterpreter`.
+  - Wired continuous learning hooks into `PeexhAgent`: `submit_correction`, `confirm_proposal`, `select_candidate`.
+  - Added `has_memory_match` field to `AgentDecision` and memory-informed badge to `TranscriptView`.
+  - Expanded test suite to 52 passing tests (memory store unit tests and adaptive flow integration tests).
+- Drafted RFC-006 for Phase 5 Evaluation Framework and Baseline Benchmarking:
+  - Specified standalone `backend/evaluation/` module with `BaselineCapture`, `PeexhEvaluator`, and `MemoryLoopEvaluator`.
+  - Defined WER (Word Error Rate) and IMR (Intent Match Rate) metrics and latency profiling per pipeline stage.
+  - Specified curated dysarthric phonetic distortion dataset schema (`samples.json`, 30+ samples).
+  - Defined auto-generated Markdown + JSON evaluation report output.
+
 ### Changed
 - Hardened RFC-003 high-confidence policy: a phrase proposal now requires the configured top-candidate threshold and a separately configurable minimum STT confidence, preventing memory or composite-score bonuses from bypassing either safeguard.
 
