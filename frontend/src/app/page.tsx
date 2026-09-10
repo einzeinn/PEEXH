@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 import { useSpeechStream } from "@/hooks/useSpeechStream";
 import { TapToTalkButton } from "@/components/speech/TapToTalkButton";
 import { TranscriptView } from "@/components/speech/TranscriptView";
 import { ConfirmedMessageView } from "@/components/speech/ConfirmedMessageView";
+import { DemoBar } from "@/components/demo/DemoBar";
 
 interface BackendHealth {
   status: string;
@@ -17,6 +18,7 @@ export default function HomePage() {
   const [health, setHealth] = useState<BackendHealth | null>(null);
   const [loadingHealth, setLoadingHealth] = useState<boolean>(true);
   const [healthError, setHealthError] = useState<string | null>(null);
+  const [demoSimulating, setDemoSimulating] = useState(false);
 
   const {
     status,
@@ -37,7 +39,6 @@ export default function HomePage() {
     submitCorrection,
     requestRepeat,
   } = useSpeechStream();
-
 
   const checkBackendHealth = async () => {
     setLoadingHealth(true);
@@ -67,6 +68,36 @@ export default function HomePage() {
     checkBackendHealth();
   }, []);
 
+  /**
+   * simulateDemo — sends a pre-set raw text through the PEEXH backend via the
+   * REST simulation endpoint, bypassing the microphone and WebSocket audio pipeline.
+   *
+   * The backend processes the raw text exactly as if it arrived as a final STT
+   * transcript, emitting an agent_decision the frontend can act on.
+   */
+  const simulateDemo = useCallback(async (rawText: string) => {
+    if (demoSimulating) return;
+    setDemoSimulating(true);
+    try {
+      const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      const res = await fetch(`${apiBaseUrl}/demo/simulate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: rawText }),
+      });
+      if (!res.ok) {
+        throw new Error(`Demo simulation failed: HTTP ${res.status}`);
+      }
+    } catch {
+      // Non-critical — demo mode gracefully degrades; the live pipeline is unaffected
+    } finally {
+      setDemoSimulating(false);
+    }
+  }, [demoSimulating]);
+
+  const isBusy = status === "connecting" || status === "listening" || status === "stopping" || demoSimulating;
+
   return (
     <div className="flex flex-col gap-8 pb-12">
       {/* Brand & Introduction */}
@@ -82,6 +113,9 @@ export default function HomePage() {
           at your own pace; PEEXH captures and interprets your voice in realtime.
         </p>
       </section>
+
+      {/* Interactive Demo Bar (RFC-008) */}
+      <DemoBar onSimulate={simulateDemo} disabled={isBusy} />
 
       {/* Main Accessible Speech Interface */}
       <section
@@ -132,7 +166,7 @@ export default function HomePage() {
             id="heading-status"
             className="font-semibold text-foreground text-xs uppercase tracking-wider"
           >
-            Backend & Service Connectivity
+            Backend &amp; Service Connectivity
           </h2>
           <button
             onClick={checkBackendHealth}

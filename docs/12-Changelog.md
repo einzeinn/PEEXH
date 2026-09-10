@@ -63,11 +63,25 @@ This is not a replacement for Git history or RFCs.
   - Added automated Markdown and JSON report generator exporting to `backend/evaluation/reports/`.
   - Verified benchmark achievements: +62.0% relative WER improvement over raw STT baseline, 62.5% Intent Match Rate, +35.7% memory adaptation delta, and < 1 ms mock latency.
   - Expanded test suite to 64 passing tests across metrics, baseline, PEEXH evaluation, memory loop, and runner orchestration.
-- Drafted RFC-008 for Phase 7 Demo Polish, Presentation Flow, and Hackathon Submission Readiness:
-  - Specified interactive demo mode and sample simulation bar (`DemoBar.tsx`) for microphone-free testing.
-  - Defined UI and motion polish tokens meeting WCAG 2.1 AAA accessibility.
-  - Established sub-3-minute video walkthrough storyboard and scene-by-scene script.
-  - Specified deployment manifests and architecture visualization assets.
+- Completed RFC-007 Runtime Settings, Audio Input Selection, and Test Readiness:
+  - Defined `AudioSettings` type and versioned localStorage key (`peexh.audio-settings.v1`).
+  - Created `AudioSettingsContext` with corruption-resilient JSON persistence and `resetToDefaults()` action.
+  - Created `useAudioDevices` hook with `devicechange` listener, `audioinput` filtering, and fallback labels.
+  - Refactored `useSpeechStream` to apply dynamic `getUserMedia()` constraints with `OverconstrainedError` device fallback.
+  - Created `SettingsButton` accessible trigger and `SettingsPanel` WCAG 2.1 AAA modal with keyboard trap, device selector, preprocessing toggles, and system diagnostics.
+  - Created `AudioInputMeter` with RMS-based real-time input level visualisation via `AnalyserNode` (zero audio stored).
+  - Integrated `AudioSettingsProvider` and `SettingsButton` into `RootLayout` header.
+  - Unit tests for settings serialisation, corruption fallback, device filtering, and constraints builder.
+  - Backend: 64/64 tests continue to pass.
+- Completed RFC-008 Demo Polish, Presentation Flow, and Hackathon Submission Readiness:
+  - Created interactive `DemoBar` component: pre-set dysarthric speech simulation samples for microphone-free judge testing.
+  - Added `/demo/simulate` REST endpoint routing raw text through full PEEXH agent pipeline without audio capture.
+  - Integrated `DemoBar` into `page.tsx`; header updated to "Phase 7 Ready".
+  - Created `docs/13-DemoScript.md`: scene-by-scene video storyboard (7 scenes, target 2 min 45 sec).
+  - Added `backend/Dockerfile` (multi-stage, non-root user, health check) and `render.yaml` for one-click Render.com deployment.
+  - Updated `README.md` with architecture diagram, demo mode instructions, deployment guide, and full documentation index.
+  - Backend: 69/69 tests pass (5 new tests for `/demo/simulate` endpoint).
+
 
 ### Changed
 - Hardened RFC-003 high-confidence policy: a phrase proposal now requires the configured top-candidate threshold and a separately configurable minimum STT confidence, preventing memory or composite-score bonuses from bypassing either safeguard.

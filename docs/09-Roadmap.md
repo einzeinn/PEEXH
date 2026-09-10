@@ -99,16 +99,19 @@ Deliverables:
 
 ## Phase 7 — Demo Polish
 
+Status: complete.
+
 Goal: sub-3-minute clear submission.
 
 Deliverables:
-- stable public deployment;
-- demo dataset;
-- split-screen recording setup;
-- architecture visual;
-- final UI polish;
-- fallback demo path;
-- submission assets.
+- stable public deployment (Dockerfile + render.yaml);
+- interactive demo mode (DemoBar — no microphone required);
+- /demo/simulate REST endpoint for microphone-free backend testing;
+- demo dataset (4 pre-set dysarthric speech samples);
+- architecture visual in README;
+- 13-DemoScript.md scene-by-scene storyboard;
+- final UI integration and header update;
+- submission assets and deployment documentation.
 
 ## Future Scope
 

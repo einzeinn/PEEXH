@@ -1,0 +1,39 @@
+# render.yaml — PEEXH Render.com deployment manifest
+#
+# Deploy with: Connect this repo on render.com and Render auto-detects this file.
+# All secret environment variables (ASSEMBLYAI_API_KEY, DATABASE_URL, etc.)
+# must be set via the Render dashboard or render CLI — NEVER commit secrets.
+
+services:
+  # -------------------------------------------------------------------------- #
+  # PEEXH FastAPI backend                                                        #
+  # -------------------------------------------------------------------------- #
+  - type: web
+    name: peexh-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+
+    # Environment variable groups (define in Render dashboard)
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+
+      # AssemblyAI real-time streaming API key — set in Render dashboard
+      - key: ASSEMBLYAI_API_KEY
+        sync: false
+
+      # Supabase PostgreSQL connection string — set in Render dashboard
+      - key: DATABASE_URL
+        sync: false
+
+      # CORS — set to your Vercel frontend URL
+      - key: ALLOWED_ORIGINS
+        sync: false
+
+    healthCheckPath: /health
+
+    # Auto-deploy from main branch
+    autoDeploy: true

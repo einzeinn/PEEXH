@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.demo import router as demo_router
 from app.api.health import router as health_router
 from app.api.speech_ws import router as speech_ws_router
 from app.core.config import settings
@@ -25,6 +26,7 @@ app.add_middleware(
 # Include routers
 app.include_router(health_router)
 app.include_router(speech_ws_router)
+app.include_router(demo_router)
 
 
 

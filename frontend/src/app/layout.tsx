@@ -32,7 +32,7 @@ export default function RootLayout({
               </div>
               <div className="flex items-center space-x-3">
                 <span className="text-xs text-slate-500 hidden sm:inline" aria-label="System status">
-                  Phase 6 Ready
+                  Phase 7 Ready
                 </span>
                 <SettingsButton />
               </div>
