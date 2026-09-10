@@ -12,6 +12,7 @@ import {
   Check,
   X,
   Loader2,
+  Brain,
 } from "lucide-react";
 import {
   StreamStatus,
@@ -199,21 +200,29 @@ export function TranscriptView({
               </h3>
             </div>
 
-            <span
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                agentDecision.confidence_level === "HIGH"
-                  ? "bg-green-200/70 text-green-900 dark:bg-green-900/60 dark:text-green-200"
-                  : agentDecision.confidence_level === "MEDIUM"
-                  ? "bg-amber-200/70 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200"
-                  : "bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>
-                {agentDecision.confidence_level} CONFIDENCE (
-                {Math.round(agentDecision.overall_confidence * 100)}%)
+            <div className="flex flex-wrap items-center gap-2">
+              {agentDecision.has_memory_match && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                  <Brain className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" aria-hidden="true" />
+                  <span>Learned from your speech</span>
+                </span>
+              )}
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+                  agentDecision.confidence_level === "HIGH"
+                    ? "bg-green-200/70 text-green-900 dark:bg-green-900/60 dark:text-green-200"
+                    : agentDecision.confidence_level === "MEDIUM"
+                    ? "bg-amber-200/70 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200"
+                    : "bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>
+                  {agentDecision.confidence_level} CONFIDENCE (
+                  {Math.round(agentDecision.overall_confidence * 100)}%)
+                </span>
               </span>
-            </span>
+            </div>
           </div>
 
           {/* Pending indicator */}

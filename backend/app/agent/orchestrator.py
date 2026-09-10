@@ -1,11 +1,14 @@
 """PEEXH agent orchestrator connecting transcription, interpretation, and scoring."""
 
+import asyncio
 import logging
 from typing import Any, Dict, Optional
 
 from app.agent.state import AgentState
 from app.llm.base import Interpreter
 from app.llm.factory import get_interpreter
+from app.memory.base import MemoryStore
+from app.memory.factory import get_memory_store
 from app.models.agent import (
     AgentAction,
     AgentDecision,
@@ -32,6 +35,7 @@ class PeexhAgent:
         self,
         interpreter: Optional[Interpreter] = None,
         scorer: Optional[ConfidenceScorer] = None,
+        memory_store: Optional[MemoryStore] = None,
         config: Optional[Settings] = None,
     ) -> None:
         cfg = config or default_settings
@@ -41,8 +45,10 @@ class PeexhAgent:
             low_threshold=cfg.PEEXH_LOW_CONFIDENCE_THRESHOLD,
             min_stt_confidence_for_high=cfg.PEEXH_MIN_STT_CONFIDENCE_FOR_HIGH,
         )
+        self.memory_store = memory_store or get_memory_store(cfg)
         self._state: AgentState = AgentState.IDLE
         self.active_decision: Optional[AgentDecision] = None
+        self.last_raw_transcript: str = ""
 
     @property
     def state(self) -> AgentState:
@@ -58,21 +64,35 @@ class PeexhAgent:
         """Reset agent back to IDLE state."""
         self._state = AgentState.IDLE
         self.active_decision = None
+        self.last_raw_transcript = ""
 
     async def process_transcript(
         self,
         transcript: str,
         stt_confidence: float = 0.0,
         context: Optional[Dict[str, Any]] = None,
-        has_memory_match: bool = False,
+        has_memory_match: Optional[bool] = None,
     ) -> AgentDecision:
-        """Execute interpretation and scoring on a final speech transcript."""
+        """Execute interpretation, memory retrieval, and scoring on a speech transcript."""
+        self.last_raw_transcript = transcript
+
+        # 0. Check personal speech memory (RFC-005)
+        ctx = dict(context) if context else {}
+        if has_memory_match is None:
+            user_id = ctx.get("user_id", "default_user")
+            memory_matches = await self.memory_store.retrieve_matches(transcript, user_id=user_id)
+            if memory_matches:
+                ctx["memory_matches"] = memory_matches
+            has_memory_match = bool(
+                memory_matches and memory_matches[0].similarity_score >= 0.70
+            )
+
         # 1. Transition to INTERPRETING
         self.set_state(AgentState.INTERPRETING)
         interpretation = await self.interpreter.interpret(
             transcript=transcript,
             stt_confidence=stt_confidence,
-            context=context,
+            context=ctx,
         )
 
         # 2. Transition to DECIDING
@@ -81,6 +101,7 @@ class PeexhAgent:
             interpretation=interpretation,
             has_memory_match=has_memory_match,
         )
+        decision.has_memory_match = has_memory_match
 
         # 3. RFC-004 invariant: every agent_decision (HIGH, MEDIUM, or LOW) enters
         #    AWAITING_CONFIRMATION. Only the user's request_repeat WebSocket message
@@ -106,6 +127,14 @@ class PeexhAgent:
 
         self.set_state(AgentState.CONFIRMED)
         self.active_decision = None
+
+        # Learning hook: record phrase usage frequency
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self.memory_store.record_phrase_usage(phrase))
+        except RuntimeError:
+            pass
+
         return CommunicationReadyEvent(
             phrase=phrase,
             source=ConfirmedPhraseSource.PROPOSAL,
@@ -130,6 +159,14 @@ class PeexhAgent:
 
         self.set_state(AgentState.CONFIRMED)
         self.active_decision = None
+
+        # Learning hook: record phrase usage frequency
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self.memory_store.record_phrase_usage(phrase))
+        except RuntimeError:
+            pass
+
         return CommunicationReadyEvent(
             phrase=phrase,
             source=ConfirmedPhraseSource.CANDIDATE,
@@ -150,6 +187,19 @@ class PeexhAgent:
 
         self.set_state(AgentState.CONFIRMED)
         self.active_decision = None
+
+        # Learning hook: store correction pair in memory (RFC-005)
+        if self.last_raw_transcript:
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(
+                    self.memory_store.record_correction(
+                        self.last_raw_transcript, trimmed
+                    )
+                )
+            except RuntimeError:
+                pass
+
         return CommunicationReadyEvent(
             phrase=trimmed,
             source=ConfirmedPhraseSource.CORRECTION,

@@ -1,0 +1,258 @@
+[
+  {
+    "id": "SAMPLE-001",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "i ned wtr",
+    "intended_phrase": "I need some water",
+    "stt_confidence": 0.62,
+    "notes": "Consonant cluster reduction and mid-vowel centralization on water."
+  },
+  {
+    "id": "SAMPLE-002",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "wtr plez",
+    "intended_phrase": "I need some water",
+    "stt_confidence": 0.58,
+    "notes": "Spastic phonation dropping subject with plosive distortion."
+  },
+  {
+    "id": "SAMPLE-003",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "ple cal hel",
+    "intended_phrase": "Can you help me please?",
+    "stt_confidence": 0.55,
+    "notes": "Initial fricative deletion, final plosive omission on help."
+  },
+  {
+    "id": "SAMPLE-004",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "hlp me",
+    "intended_phrase": "Can you help me please?",
+    "stt_confidence": 0.65,
+    "notes": "Breathy voice causing reduced acoustic energy on vowel."
+  },
+  {
+    "id": "SAMPLE-005",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "lot ov pan",
+    "intended_phrase": "I am in pain",
+    "stt_confidence": 0.60,
+    "notes": "Hypernasal substitution with vowel prolongation."
+  },
+  {
+    "id": "SAMPLE-006",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "hurts so bad",
+    "intended_phrase": "I am in pain",
+    "stt_confidence": 0.68,
+    "notes": "Weak articulatory contact on dentals."
+  },
+  {
+    "id": "SAMPLE-007",
+    "dysarthria_type": "mixed",
+    "raw_stt_transcript": "am hungri",
+    "intended_phrase": "I am hungry",
+    "stt_confidence": 0.64,
+    "notes": "Omission of subject pronoun, velar softening."
+  },
+  {
+    "id": "SAMPLE-008",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "wan sum fud",
+    "intended_phrase": "I am hungry",
+    "stt_confidence": 0.59,
+    "notes": "Irregular syllable pacing and vowel distortion on food."
+  },
+  {
+    "id": "SAMPLE-009",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "so tyrd",
+    "intended_phrase": "I am feeling tired",
+    "stt_confidence": 0.63,
+    "notes": "Breathy phonation with diphthong reduction on tired."
+  },
+  {
+    "id": "SAMPLE-010",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "wan rest now",
+    "intended_phrase": "I am feeling tired",
+    "stt_confidence": 0.61,
+    "notes": "Strained vocal quality with plosive omission."
+  },
+  {
+    "id": "SAMPLE-011",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "ned bathrm",
+    "intended_phrase": "I need the bathroom",
+    "stt_confidence": 0.57,
+    "notes": "Dental fricative th replaced with dental stop."
+  },
+  {
+    "id": "SAMPLE-012",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "go to toylt",
+    "intended_phrase": "I need the bathroom",
+    "stt_confidence": 0.56,
+    "notes": "Telescoped syllables on toilet."
+  },
+  {
+    "id": "SAMPLE-013",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "tak medsn",
+    "intended_phrase": "Time for my medicine",
+    "stt_confidence": 0.58,
+    "notes": "Alveolar fricative s weak, medial vowel syncope."
+  },
+  {
+    "id": "SAMPLE-014",
+    "dysarthria_type": "mixed",
+    "raw_stt_transcript": "wer iz pil",
+    "intended_phrase": "Time for my medicine",
+    "stt_confidence": 0.54,
+    "notes": "Intervocalic consonant blurring."
+  },
+  {
+    "id": "SAMPLE-015",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "feelin ver kold",
+    "intended_phrase": "I am feeling cold",
+    "stt_confidence": 0.62,
+    "notes": "Final consonant cluster ld truncated."
+  },
+  {
+    "id": "SAMPLE-016",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "blan-kit plez",
+    "intended_phrase": "I am feeling cold",
+    "stt_confidence": 0.59,
+    "notes": "Staccato pause before plosive."
+  },
+  {
+    "id": "SAMPLE-017",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "tu hot her",
+    "intended_phrase": "It is too hot here",
+    "stt_confidence": 0.60,
+    "notes": "Excess stress on monosyllabic words."
+  },
+  {
+    "id": "SAMPLE-018",
+    "dysarthria_type": "mixed",
+    "raw_stt_transcript": "turn of fan",
+    "intended_phrase": "It is too hot here",
+    "stt_confidence": 0.63,
+    "notes": "Weak voiceless labiodental fricative f."
+  },
+  {
+    "id": "SAMPLE-019",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "ye thnk yu",
+    "intended_phrase": "Yes thank you",
+    "stt_confidence": 0.70,
+    "notes": "Voiceless dental fricative fronting."
+  },
+  {
+    "id": "SAMPLE-020",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "no nt now",
+    "intended_phrase": "No not right now",
+    "stt_confidence": 0.66,
+    "notes": "Nasal resonance dominates alveolar stops."
+  },
+  {
+    "id": "SAMPLE-021",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "cal doc-tr",
+    "intended_phrase": "Please call the doctor",
+    "stt_confidence": 0.57,
+    "notes": "Prolonged syllable intervals with velar stop emphasis."
+  },
+  {
+    "id": "SAMPLE-022",
+    "dysarthria_type": "mixed",
+    "raw_stt_transcript": "ned doctur",
+    "intended_phrase": "Please call the doctor",
+    "stt_confidence": 0.59,
+    "notes": "Vowel centralization and dropped article."
+  },
+  {
+    "id": "SAMPLE-023",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "gud morn-in",
+    "intended_phrase": "Good morning",
+    "stt_confidence": 0.69,
+    "notes": "Velar nasal ng replaced with alveolar n."
+  },
+  {
+    "id": "SAMPLE-024",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "gud nyt",
+    "intended_phrase": "Good night",
+    "stt_confidence": 0.71,
+    "notes": "Unreleased final alveolar stop t."
+  },
+  {
+    "id": "SAMPLE-025",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "opn win-do",
+    "intended_phrase": "Please open the window",
+    "stt_confidence": 0.61,
+    "notes": "Consonant omission and bilabial nasal weakening."
+  },
+  {
+    "id": "SAMPLE-026",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "clos dor ple",
+    "intended_phrase": "Please close the door",
+    "stt_confidence": 0.58,
+    "notes": "Sibilant distortion and cluster simplification."
+  },
+  {
+    "id": "SAMPLE-027",
+    "dysarthria_type": "flaccid",
+    "raw_stt_transcript": "cant breath wel",
+    "intended_phrase": "I am having trouble breathing",
+    "stt_confidence": 0.52,
+    "notes": "Severe breathiness with short phrases."
+  },
+  {
+    "id": "SAMPLE-028",
+    "dysarthria_type": "mixed",
+    "raw_stt_transcript": "sit up plez",
+    "intended_phrase": "I want to sit up please",
+    "stt_confidence": 0.63,
+    "notes": "Telegraphic output due to motor fatigue."
+  },
+  {
+    "id": "SAMPLE-029",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "lie down",
+    "intended_phrase": "I want to lie down",
+    "stt_confidence": 0.67,
+    "notes": "Short utterance with strained phonation."
+  },
+  {
+    "id": "SAMPLE-030",
+    "dysarthria_type": "ataxic",
+    "raw_stt_transcript": "wer my glasz",
+    "intended_phrase": "Where are my glasses?",
+    "stt_confidence": 0.56,
+    "notes": "Sibilant voicing and vowel lengthening."
+  },
+  {
+    "id": "SAMPLE-031",
+    "dysarthria_type": "mixed",
+    "raw_stt_transcript": "lov yu al",
+    "intended_phrase": "I love you all",
+    "stt_confidence": 0.68,
+    "notes": "Labiodental fricative weakening."
+  },
+  {
+    "id": "SAMPLE-032",
+    "dysarthria_type": "spastic",
+    "raw_stt_transcript": "im o-kay",
+    "intended_phrase": "I am feeling okay",
+    "stt_confidence": 0.72,
+    "notes": "Glottal stop insertion in okay."
+  }
+]

@@ -44,6 +44,7 @@ class AgentDecision(BaseModel):
     primary_phrase: Optional[str] = None
     candidates: List[PhraseCandidate] = Field(default_factory=list)
     reason: str = ""
+    has_memory_match: bool = False
 
 
 # --- RFC-004 Confirmation UX Models ---

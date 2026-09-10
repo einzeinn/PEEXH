@@ -1,0 +1,1126 @@
+{
+  "summary": {
+    "total_samples": 32,
+    "baseline_avg_wer": 0.9385,
+    "peexh_avg_wer": 0.3568,
+    "wer_improvement_pct": 61.99,
+    "intent_match_rate": 0.625,
+    "avg_total_latency_ms": 0.03,
+    "memory_loop_avg_delta": 0.3568,
+    "generated_at": "2026-09-10T17:52:16.515823Z"
+  },
+  "baseline": [
+    {
+      "sample_id": "SAMPLE-001",
+      "raw_transcript": "i ned wtr",
+      "intended_phrase": "I need some water",
+      "baseline_wer": 0.75
+    },
+    {
+      "sample_id": "SAMPLE-002",
+      "raw_transcript": "wtr plez",
+      "intended_phrase": "I need some water",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-003",
+      "raw_transcript": "ple cal hel",
+      "intended_phrase": "Can you help me please?",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-004",
+      "raw_transcript": "hlp me",
+      "intended_phrase": "Can you help me please?",
+      "baseline_wer": 0.8
+    },
+    {
+      "sample_id": "SAMPLE-005",
+      "raw_transcript": "lot ov pan",
+      "intended_phrase": "I am in pain",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-006",
+      "raw_transcript": "hurts so bad",
+      "intended_phrase": "I am in pain",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-007",
+      "raw_transcript": "am hungri",
+      "intended_phrase": "I am hungry",
+      "baseline_wer": 0.6667
+    },
+    {
+      "sample_id": "SAMPLE-008",
+      "raw_transcript": "wan sum fud",
+      "intended_phrase": "I am hungry",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-009",
+      "raw_transcript": "so tyrd",
+      "intended_phrase": "I am feeling tired",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-010",
+      "raw_transcript": "wan rest now",
+      "intended_phrase": "I am feeling tired",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-011",
+      "raw_transcript": "ned bathrm",
+      "intended_phrase": "I need the bathroom",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-012",
+      "raw_transcript": "go to toylt",
+      "intended_phrase": "I need the bathroom",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-013",
+      "raw_transcript": "tak medsn",
+      "intended_phrase": "Time for my medicine",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-014",
+      "raw_transcript": "wer iz pil",
+      "intended_phrase": "Time for my medicine",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-015",
+      "raw_transcript": "feelin ver kold",
+      "intended_phrase": "I am feeling cold",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-016",
+      "raw_transcript": "blan-kit plez",
+      "intended_phrase": "I am feeling cold",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-017",
+      "raw_transcript": "tu hot her",
+      "intended_phrase": "It is too hot here",
+      "baseline_wer": 0.8
+    },
+    {
+      "sample_id": "SAMPLE-018",
+      "raw_transcript": "turn of fan",
+      "intended_phrase": "It is too hot here",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-019",
+      "raw_transcript": "ye thnk yu",
+      "intended_phrase": "Yes thank you",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-020",
+      "raw_transcript": "no nt now",
+      "intended_phrase": "No not right now",
+      "baseline_wer": 0.5
+    },
+    {
+      "sample_id": "SAMPLE-021",
+      "raw_transcript": "cal doc-tr",
+      "intended_phrase": "Please call the doctor",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-022",
+      "raw_transcript": "ned doctur",
+      "intended_phrase": "Please call the doctor",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-023",
+      "raw_transcript": "gud morn-in",
+      "intended_phrase": "Good morning",
+      "baseline_wer": 1.5
+    },
+    {
+      "sample_id": "SAMPLE-024",
+      "raw_transcript": "gud nyt",
+      "intended_phrase": "Good night",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-025",
+      "raw_transcript": "opn win-do",
+      "intended_phrase": "Please open the window",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-026",
+      "raw_transcript": "clos dor ple",
+      "intended_phrase": "Please close the door",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-027",
+      "raw_transcript": "cant breath wel",
+      "intended_phrase": "I am having trouble breathing",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-028",
+      "raw_transcript": "sit up plez",
+      "intended_phrase": "I want to sit up please",
+      "baseline_wer": 0.6667
+    },
+    {
+      "sample_id": "SAMPLE-029",
+      "raw_transcript": "lie down",
+      "intended_phrase": "I want to lie down",
+      "baseline_wer": 0.6
+    },
+    {
+      "sample_id": "SAMPLE-030",
+      "raw_transcript": "wer my glasz",
+      "intended_phrase": "Where are my glasses?",
+      "baseline_wer": 0.75
+    },
+    {
+      "sample_id": "SAMPLE-031",
+      "raw_transcript": "lov yu al",
+      "intended_phrase": "I love you all",
+      "baseline_wer": 1.0
+    },
+    {
+      "sample_id": "SAMPLE-032",
+      "raw_transcript": "im o-kay",
+      "intended_phrase": "I am feeling okay",
+      "baseline_wer": 1.0
+    }
+  ],
+  "peexh": [
+    {
+      "sample_id": "SAMPLE-001",
+      "raw_transcript": "i ned wtr",
+      "intended_phrase": "I need some water",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I need some water",
+      "candidates": [
+        "I need some water",
+        "Can I have a drink?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.01,
+        "llm_interpret_ms": 0.05,
+        "scorer_ms": 0.07,
+        "total_pipeline_ms": 0.15
+      }
+    },
+    {
+      "sample_id": "SAMPLE-002",
+      "raw_transcript": "wtr plez",
+      "intended_phrase": "I need some water",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I need some water",
+      "candidates": [
+        "I need some water",
+        "Can I have a drink?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.01,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.02,
+        "total_pipeline_ms": 0.04
+      }
+    },
+    {
+      "sample_id": "SAMPLE-003",
+      "raw_transcript": "ple cal hel",
+      "intended_phrase": "Can you help me please?",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Can you help me please?",
+      "candidates": [
+        "Can you help me please?",
+        "I need some assistance"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.03
+      }
+    },
+    {
+      "sample_id": "SAMPLE-004",
+      "raw_transcript": "hlp me",
+      "intended_phrase": "Can you help me please?",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Can you help me please?",
+      "candidates": [
+        "Can you help me please?",
+        "I need some assistance"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-005",
+      "raw_transcript": "lot ov pan",
+      "intended_phrase": "I am in pain",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I am in pain",
+      "candidates": [
+        "I am in pain",
+        "It hurts right now"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-006",
+      "raw_transcript": "hurts so bad",
+      "intended_phrase": "I am in pain",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I am in pain",
+      "candidates": [
+        "I am in pain",
+        "It hurts right now"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-007",
+      "raw_transcript": "am hungri",
+      "intended_phrase": "I am hungry",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I am hungry",
+      "candidates": [
+        "I am hungry",
+        "Can I have something to eat?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-008",
+      "raw_transcript": "wan sum fud",
+      "intended_phrase": "I am hungry",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Wan sum fud.",
+      "candidates": [
+        "Wan sum fud."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.03
+      }
+    },
+    {
+      "sample_id": "SAMPLE-009",
+      "raw_transcript": "so tyrd",
+      "intended_phrase": "I am feeling tired",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I am feeling tired",
+      "candidates": [
+        "I am feeling tired",
+        "I would like to rest"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-010",
+      "raw_transcript": "wan rest now",
+      "intended_phrase": "I am feeling tired",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "I am feeling tired",
+      "candidates": [
+        "I am feeling tired",
+        "I would like to rest"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-011",
+      "raw_transcript": "ned bathrm",
+      "intended_phrase": "I need the bathroom",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I need the bathroom",
+      "candidates": [
+        "I need the bathroom",
+        "Can you assist me to the restroom?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.01,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.03
+      }
+    },
+    {
+      "sample_id": "SAMPLE-012",
+      "raw_transcript": "go to toylt",
+      "intended_phrase": "I need the bathroom",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Go to toylt.",
+      "candidates": [
+        "Go to toylt."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-013",
+      "raw_transcript": "tak medsn",
+      "intended_phrase": "Time for my medicine",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Time for my medicine",
+      "candidates": [
+        "Time for my medicine",
+        "I need my medication"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-014",
+      "raw_transcript": "wer iz pil",
+      "intended_phrase": "Time for my medicine",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Wer iz pil.",
+      "candidates": [
+        "Wer iz pil."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-015",
+      "raw_transcript": "feelin ver kold",
+      "intended_phrase": "I am feeling cold",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I am feeling cold",
+      "candidates": [
+        "I am feeling cold",
+        "Can I have a blanket please?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-016",
+      "raw_transcript": "blan-kit plez",
+      "intended_phrase": "I am feeling cold",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Blan-kit plez.",
+      "candidates": [
+        "Blan-kit plez."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-017",
+      "raw_transcript": "tu hot her",
+      "intended_phrase": "It is too hot here",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "It is too hot here",
+      "candidates": [
+        "It is too hot here",
+        "Could we turn on the fan?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-018",
+      "raw_transcript": "turn of fan",
+      "intended_phrase": "It is too hot here",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Turn of fan.",
+      "candidates": [
+        "Turn of fan."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-019",
+      "raw_transcript": "ye thnk yu",
+      "intended_phrase": "Yes thank you",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Yes thank you",
+      "candidates": [
+        "Yes thank you",
+        "Thank you so much"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-020",
+      "raw_transcript": "no nt now",
+      "intended_phrase": "No not right now",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "No not right now",
+      "candidates": [
+        "No not right now",
+        "I would rather wait"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-021",
+      "raw_transcript": "cal doc-tr",
+      "intended_phrase": "Please call the doctor",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Please call the doctor",
+      "candidates": [
+        "Please call the doctor",
+        "I need to see the physician"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-022",
+      "raw_transcript": "ned doctur",
+      "intended_phrase": "Please call the doctor",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Ned doctur.",
+      "candidates": [
+        "Ned doctur."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-023",
+      "raw_transcript": "gud morn-in",
+      "intended_phrase": "Good morning",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Good morning",
+      "candidates": [
+        "Good morning",
+        "Hello there"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-024",
+      "raw_transcript": "gud nyt",
+      "intended_phrase": "Good night",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "Good night",
+      "candidates": [
+        "Good night",
+        "I am going to sleep"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-025",
+      "raw_transcript": "opn win-do",
+      "intended_phrase": "Please open the window",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Opn win-do.",
+      "candidates": [
+        "Opn win-do."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-026",
+      "raw_transcript": "clos dor ple",
+      "intended_phrase": "Please close the door",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Clos dor ple.",
+      "candidates": [
+        "Clos dor ple."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-027",
+      "raw_transcript": "cant breath wel",
+      "intended_phrase": "I am having trouble breathing",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Cant breath wel.",
+      "candidates": [
+        "Cant breath wel."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-028",
+      "raw_transcript": "sit up plez",
+      "intended_phrase": "I want to sit up please",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Sit up plez.",
+      "candidates": [
+        "Sit up plez."
+      ],
+      "peexh_wer": 0.6667,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-029",
+      "raw_transcript": "lie down",
+      "intended_phrase": "I want to lie down",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I want to lie down",
+      "candidates": [
+        "I want to lie down",
+        "Can I go back to bed?"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-030",
+      "raw_transcript": "wer my glasz",
+      "intended_phrase": "Where are my glasses?",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Wer my glasz.",
+      "candidates": [
+        "Wer my glasz."
+      ],
+      "peexh_wer": 0.75,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-031",
+      "raw_transcript": "lov yu al",
+      "intended_phrase": "I love you all",
+      "agent_action": "SHOW_CANDIDATES",
+      "primary_phrase": "Lov yu al.",
+      "candidates": [
+        "Lov yu al."
+      ],
+      "peexh_wer": 1.0,
+      "intent_matched": false,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    },
+    {
+      "sample_id": "SAMPLE-032",
+      "raw_transcript": "im o-kay",
+      "intended_phrase": "I am feeling okay",
+      "agent_action": "PROPOSE_PHRASE",
+      "primary_phrase": "I am feeling okay",
+      "candidates": [
+        "I am feeling okay",
+        "Everything is fine"
+      ],
+      "peexh_wer": 0.0,
+      "intent_matched": true,
+      "has_memory_match": false,
+      "latency": {
+        "memory_retrieval_ms": 0.0,
+        "llm_interpret_ms": 0.01,
+        "scorer_ms": 0.01,
+        "total_pipeline_ms": 0.02
+      }
+    }
+  ],
+  "memory_loop": [
+    {
+      "sample_id": "SAMPLE-001",
+      "raw_transcript": "i ned wtr",
+      "intended_phrase": "I need some water",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-002",
+      "raw_transcript": "wtr plez",
+      "intended_phrase": "I need some water",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-003",
+      "raw_transcript": "ple cal hel",
+      "intended_phrase": "Can you help me please?",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-004",
+      "raw_transcript": "hlp me",
+      "intended_phrase": "Can you help me please?",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-005",
+      "raw_transcript": "lot ov pan",
+      "intended_phrase": "I am in pain",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-006",
+      "raw_transcript": "hurts so bad",
+      "intended_phrase": "I am in pain",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-007",
+      "raw_transcript": "am hungri",
+      "intended_phrase": "I am hungry",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-008",
+      "raw_transcript": "wan sum fud",
+      "intended_phrase": "I am hungry",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-009",
+      "raw_transcript": "so tyrd",
+      "intended_phrase": "I am feeling tired",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-010",
+      "raw_transcript": "wan rest now",
+      "intended_phrase": "I am feeling tired",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-011",
+      "raw_transcript": "ned bathrm",
+      "intended_phrase": "I need the bathroom",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-012",
+      "raw_transcript": "go to toylt",
+      "intended_phrase": "I need the bathroom",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-013",
+      "raw_transcript": "tak medsn",
+      "intended_phrase": "Time for my medicine",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-014",
+      "raw_transcript": "wer iz pil",
+      "intended_phrase": "Time for my medicine",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-015",
+      "raw_transcript": "feelin ver kold",
+      "intended_phrase": "I am feeling cold",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-016",
+      "raw_transcript": "blan-kit plez",
+      "intended_phrase": "I am feeling cold",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-017",
+      "raw_transcript": "tu hot her",
+      "intended_phrase": "It is too hot here",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-018",
+      "raw_transcript": "turn of fan",
+      "intended_phrase": "It is too hot here",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-019",
+      "raw_transcript": "ye thnk yu",
+      "intended_phrase": "Yes thank you",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-020",
+      "raw_transcript": "no nt now",
+      "intended_phrase": "No not right now",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-021",
+      "raw_transcript": "cal doc-tr",
+      "intended_phrase": "Please call the doctor",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-022",
+      "raw_transcript": "ned doctur",
+      "intended_phrase": "Please call the doctor",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-023",
+      "raw_transcript": "gud morn-in",
+      "intended_phrase": "Good morning",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-024",
+      "raw_transcript": "gud nyt",
+      "intended_phrase": "Good night",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-025",
+      "raw_transcript": "opn win-do",
+      "intended_phrase": "Please open the window",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-026",
+      "raw_transcript": "clos dor ple",
+      "intended_phrase": "Please close the door",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-027",
+      "raw_transcript": "cant breath wel",
+      "intended_phrase": "I am having trouble breathing",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-028",
+      "raw_transcript": "sit up plez",
+      "intended_phrase": "I want to sit up please",
+      "pass1_wer": 0.6667,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.6667,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-029",
+      "raw_transcript": "lie down",
+      "intended_phrase": "I want to lie down",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-030",
+      "raw_transcript": "wer my glasz",
+      "intended_phrase": "Where are my glasses?",
+      "pass1_wer": 0.75,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.75,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-031",
+      "raw_transcript": "lov yu al",
+      "intended_phrase": "I love you all",
+      "pass1_wer": 1.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 1.0,
+      "has_memory_match_pass2": true
+    },
+    {
+      "sample_id": "SAMPLE-032",
+      "raw_transcript": "im o-kay",
+      "intended_phrase": "I am feeling okay",
+      "pass1_wer": 0.0,
+      "pass2_wer": 0.0,
+      "memory_delta": 0.0,
+      "has_memory_match_pass2": true
+    }
+  ]
+}

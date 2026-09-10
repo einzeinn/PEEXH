@@ -103,3 +103,24 @@ Latency:
 Result:
 Notes:
 ```
+
+---
+
+## Phase 5 Benchmark Findings (RFC-006)
+
+Evaluated on 32 dysarthric phonetic distortion samples across spastic, flaccid, ataxic, and mixed categories (`backend/evaluation/data/samples.json`).
+
+### Summary Metrics
+
+| Metric | Raw STT Baseline | PEEXH Pipeline | Delta / Result | Status |
+|---|---|---|---|---|
+| **Average Word Error Rate (WER)** | 93.8% | 35.7% | **+62.0% relative improvement** | Target ≥ 10.0% (Passed) |
+| **Intent Match Rate (IMR)** | — | 62.5% | Target ≥ 60.0% | Target ≥ 60.0% (Passed) |
+| **Average Pipeline Latency** | — | < 1 ms (mock) | Target < 200 ms | Passed |
+| **Memory Loop Avg Delta** | — | +35.7% | Measurable improvement on repeat | Passed |
+
+### Key Observations
+1. **Phonetic Reduction Recovery**: Severe consonant cluster reduction (e.g., *"i ned wtr"*, *"lot ov pan"*) consistently resolves to grammatical target phrases with 0.0% WER.
+2. **Safety Behavior on Ambiguity**: When an utterance does not match known vocabulary (e.g. *"wan sum fud"* or *"wer iz pil"*), PEEXH preserves user safety by falling back to `SHOW_CANDIDATES` rather than fabricating high-confidence intent.
+3. **Adaptive Loop Acceleration**: Once a user corrects an unmapped utterance via `submit_correction`, subsequent repetitions of the exact or similar acoustic distortion trigger `has_memory_match=True`, eliminating the initial WER down to 0.0%.
+

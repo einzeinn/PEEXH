@@ -37,6 +37,7 @@ export interface AgentDecision {
   primary_phrase: string | null;
   candidates: PhraseCandidate[];
   reason: string;
+  has_memory_match?: boolean;
 }
 
 export interface CommunicationReadyEvent {

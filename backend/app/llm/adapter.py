@@ -58,7 +58,22 @@ class CloudLLMInterpreter(Interpreter):
 
         user_content = f"Raw transcript: '{transcript}' (STT acoustic confidence: {stt_confidence:.2f})"
         if context:
-            user_content += f"\nRecent context/memory: {json.dumps(context)}"
+            memory_matches = context.get("memory_matches", [])
+            if memory_matches:
+                lines = []
+                for m in memory_matches:
+                    p = getattr(m, "matched_phrase", None) or (m.get("matched_phrase") if isinstance(m, dict) else "")
+                    orig = getattr(m, "original_transcript", None) or (m.get("original_transcript") if isinstance(m, dict) else "")
+                    freq = getattr(m, "frequency", 1) or (m.get("frequency", 1) if isinstance(m, dict) else 1)
+                    if p:
+                        lines.append(f"- Previously, when user said '{orig}', they meant '{p}' (confirmed {freq}x)")
+                if lines:
+                    user_content += "\n\nRelevant Personal Speech Memory:\n" + "\n".join(lines)
+                    user_content += "\n(Give strong priority to verified personal speech memory if the phonetic pattern is plausible.)"
+
+            other_ctx = {k: v for k, v in context.items() if k != "memory_matches"}
+            if other_ctx:
+                user_content += f"\nRecent context: {json.dumps(other_ctx)}"
 
         headers = {
             "Authorization": f"Bearer {self.api_key}",
