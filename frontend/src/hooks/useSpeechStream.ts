@@ -2,6 +2,8 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { downsampleTo16k } from "@/lib/audio/pcm";
+import { useAudioSettings } from "@/context/AudioSettingsContext";
+import { buildAudioConstraints } from "@/types/audioSettings";
 
 export type StreamStatus = "idle" | "connecting" | "listening" | "stopping" | "error";
 
@@ -66,6 +68,7 @@ export interface SpeechStreamState {
 }
 
 export function useSpeechStream() {
+  const { settings: audioSettings } = useAudioSettings();
   const [state, setState] = useState<SpeechStreamState>({
     status: "idle",
     partialTranscript: "",
@@ -181,15 +184,28 @@ export function useSpeechStream() {
     });
 
     try {
-      // 1. Request microphone access
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: 1,
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-      });
+      // 1. Request microphone access using runtime audio settings
+      const audioConstraints = buildAudioConstraints(audioSettings);
+      let stream: MediaStream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: audioConstraints,
+        });
+      } catch (deviceErr) {
+        // If exact deviceId fails (e.g. OverconstrainedError), fallback to system default
+        if (audioSettings.selectedDeviceId) {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              channelCount: 1,
+              echoCancellation: audioSettings.echoCancellation,
+              noiseSuppression: audioSettings.noiseSuppression,
+              autoGainControl: audioSettings.autoGainControl,
+            },
+          });
+        } else {
+          throw deviceErr;
+        }
+      }
       mediaStreamRef.current = stream;
 
       // 2. Determine WebSocket URL
@@ -330,7 +346,7 @@ export function useSpeechStream() {
       }));
       cleanupAudio();
     }
-  }, [cleanupAudio]);
+  }, [cleanupAudio, audioSettings]);
 
   useEffect(() => {
     return () => {

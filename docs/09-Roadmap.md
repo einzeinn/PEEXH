@@ -75,7 +75,29 @@ Deliverables:
 - latency notes;
 - failure examples.
 
-## Phase 6 — Demo Polish
+## Phase 6 — Runtime Settings & Test Readiness
+
+Goal: Give users and developers explicit control over browser audio input and audio preprocessing so PEEXH can be tested reliably across microphones, loopback devices, Stereo Mix, virtual audio cables, and other browser-visible input devices.
+
+Deliverables:
+- audio input device selection;
+- browser-visible microphone enumeration;
+- persistent local audio settings;
+- echo cancellation toggle;
+- noise suppression toggle;
+- auto gain control toggle;
+- microphone permission state;
+- audio input diagnostics;
+- selected-device diagnostics;
+- actual AudioContext sample rate;
+- PEEXH target sample rate display;
+- backend connectivity diagnostic;
+- active speech provider diagnostic when available;
+- accessible settings UI;
+- graceful fallback when browser APIs are unavailable;
+- tests and production build verification.
+
+## Phase 7 — Demo Polish
 
 Goal: sub-3-minute clear submission.
 

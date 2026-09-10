@@ -63,7 +63,7 @@ This is not a replacement for Git history or RFCs.
   - Added automated Markdown and JSON report generator exporting to `backend/evaluation/reports/`.
   - Verified benchmark achievements: +62.0% relative WER improvement over raw STT baseline, 62.5% Intent Match Rate, +35.7% memory adaptation delta, and < 1 ms mock latency.
   - Expanded test suite to 64 passing tests across metrics, baseline, PEEXH evaluation, memory loop, and runner orchestration.
-- Drafted RFC-007 for Phase 6 Demo Polish, Presentation Flow, and Hackathon Submission Readiness:
+- Drafted RFC-008 for Phase 7 Demo Polish, Presentation Flow, and Hackathon Submission Readiness:
   - Specified interactive demo mode and sample simulation bar (`DemoBar.tsx`) for microphone-free testing.
   - Defined UI and motion polish tokens meeting WCAG 2.1 AAA accessibility.
   - Established sub-3-minute video walkthrough storyboard and scene-by-scene script.
