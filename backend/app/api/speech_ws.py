@@ -142,11 +142,22 @@ async def speech_websocket_endpoint(websocket: WebSocket):
                     )
                     await websocket.send_text(err_event.model_dump_json())
 
-                except Exception as parse_exc:
+                except ValueError as parse_exc:
+                    # Bad control message from the client (unknown type, bad payload, etc.)
                     logger.error(f"Error handling control message: {parse_exc}")
                     err_event = ErrorEvent(
                         message=f"Invalid message payload: {str(parse_exc)}",
                         code="INVALID_CONTROL_MESSAGE",
+                    )
+                    await websocket.send_text(err_event.model_dump_json())
+
+                except Exception as parse_exc:
+                    # Catch-all: avoid leaking upstream AssemblyAI failures as
+                    # INVALID_CONTROL_MESSAGE — forward the raw error description.
+                    logger.error(f"Unexpected error handling message: {parse_exc}")
+                    err_event = ErrorEvent(
+                        message=str(parse_exc),
+                        code="INTERNAL_ERROR",
                     )
                     await websocket.send_text(err_event.model_dump_json())
 

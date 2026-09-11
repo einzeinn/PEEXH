@@ -1,7 +1,6 @@
-"""AssemblyAI Realtime Speech-to-Text WebSocket adapter."""
+"""AssemblyAI Streaming Speech-to-Text WebSocket adapter (v3)."""
 
 import asyncio
-import base64
 import json
 import logging
 from typing import Optional
@@ -12,11 +11,12 @@ from app.models.speech import ErrorEvent, TranscriptEvent, TranscriptWord
 
 logger = logging.getLogger(__name__)
 
-ASSEMBLYAI_REALTIME_URL = "wss://api.assemblyai.com/v2/realtime/ws"
+# v3 streaming endpoint
+ASSEMBLYAI_STREAMING_URL = "wss://streaming.assemblyai.com/v3/ws"
 
 
 class AssemblyAITranscriber(SpeechTranscriber):
-    """Realtime STT adapter connecting to AssemblyAI WebSocket service."""
+    """Realtime STT adapter connecting to AssemblyAI v3 streaming WebSocket service."""
 
     def __init__(self, api_key: str, sample_rate: int = 16000) -> None:
         super().__init__()
@@ -27,18 +27,23 @@ class AssemblyAITranscriber(SpeechTranscriber):
         self._is_active = False
 
     async def start(self) -> None:
-        """Connect to AssemblyAI Realtime WebSocket API."""
+        """Connect to AssemblyAI v3 Streaming WebSocket API."""
         if not self.api_key:
             raise ValueError("AssemblyAI API key is missing.")
 
-        url = f"{ASSEMBLYAI_REALTIME_URL}?sample_rate={self.sample_rate}"
+        # v3: sample_rate + explicit model as query params; auth via header
+        url = (
+            f"{ASSEMBLYAI_STREAMING_URL}"
+            f"?sample_rate={self.sample_rate}"
+            f"&speech_model=universal-3-5-pro"
+        )
         headers = {"Authorization": self.api_key}
 
         try:
             self._ws = await websockets.connect(url, additional_headers=headers)
             self._is_active = True
             self._receive_task = asyncio.create_task(self._listen_loop())
-            logger.info("Connected to AssemblyAI Realtime WebSocket")
+            logger.info("Connected to AssemblyAI v3 Streaming WebSocket")
         except Exception as exc:
             logger.error(f"Failed to connect to AssemblyAI: {exc}")
             if self._on_error:
@@ -51,21 +56,24 @@ class AssemblyAITranscriber(SpeechTranscriber):
             raise
 
     async def _listen_loop(self) -> None:
-        """Background task receiving transcript messages from AssemblyAI."""
+        """Background task receiving transcript messages from AssemblyAI v3."""
         try:
             while self._is_active and self._ws:
                 msg_str = await self._ws.recv()
                 data = json.loads(msg_str)
-                msg_type = data.get("message_type")
+                msg_type = data.get("type")
 
-                if msg_type in ("PartialTranscript", "FinalTranscript"):
-                    text = data.get("text", "").strip()
+                if msg_type == "Turn":
+                    # v3 transcript event: carries transcript + end_of_turn flag
+                    transcript = data.get("transcript", "")
+                    text = transcript.strip() if transcript else ""
+                    is_final = bool(data.get("end_of_turn", False))
+
                     if not text:
                         continue
 
-                    is_final = msg_type == "FinalTranscript"
-                    confidence = float(data.get("confidence", 0.0) or 0.0)
-                    raw_words = data.get("words", [])
+                    # v3 does not expose per-word confidence; use 0.0 as default
+                    words_raw = data.get("words", [])
                     words = [
                         TranscriptWord(
                             text=w.get("text", ""),
@@ -73,25 +81,40 @@ class AssemblyAITranscriber(SpeechTranscriber):
                             end=w.get("end"),
                             confidence=w.get("confidence"),
                         )
-                        for w in raw_words
+                        for w in words_raw
                     ]
 
                     event = TranscriptEvent(
                         text=text,
                         is_final=is_final,
-                        confidence=confidence,
+                        confidence=float(data.get("confidence", 0.0) or 0.0),
                         words=words,
                     )
 
                     if self._on_transcript:
                         await self._on_transcript(event)
 
-                elif msg_type == "SessionBegins":
-                    session_id = data.get("session_id", "unknown")
-                    logger.info(f"AssemblyAI session started: {session_id}")
+                elif msg_type == "Begin":
+                    # v3 session started event (was SessionBegins in v2)
+                    session_id = data.get("id", "unknown")
+                    logger.info(f"AssemblyAI v3 session started: {session_id}")
 
-                elif msg_type == "SessionTerminated":
-                    logger.info("AssemblyAI session terminated")
+                elif msg_type == "Termination":
+                    # v3 session ended event (was SessionTerminated in v2)
+                    logger.info("AssemblyAI v3 session terminated")
+                    break
+
+                elif msg_type == "Error":
+                    # v3 surfaces upstream errors as a typed Error message
+                    error_msg = data.get("error", "Unknown AssemblyAI error")
+                    logger.error(f"AssemblyAI upstream error: {error_msg}")
+                    if self._on_error:
+                        await self._on_error(
+                            ErrorEvent(
+                                message=f"AssemblyAI error: {error_msg}",
+                                code="ASSEMBLYAI_UPSTREAM_ERROR",
+                            )
+                        )
                     break
 
         except websockets.exceptions.ConnectionClosed:
@@ -107,14 +130,13 @@ class AssemblyAITranscriber(SpeechTranscriber):
                 )
 
     async def send_audio(self, chunk: bytes) -> None:
-        """Send 16-bit linear PCM audio chunk encoded as base64 JSON payload."""
+        """Send raw binary PCM16 audio chunk directly to AssemblyAI v3."""
         if not self._is_active or not self._ws:
             return
 
         try:
-            b64_data = base64.b64encode(chunk).decode("utf-8")
-            payload = json.dumps({"audio_data": b64_data})
-            await self._ws.send(payload)
+            # v3: raw binary frames — no base64 JSON wrapper
+            await self._ws.send(chunk)
         except Exception as exc:
             logger.error(f"Failed to send audio chunk to AssemblyAI: {exc}")
             if self._on_error:
@@ -126,13 +148,13 @@ class AssemblyAITranscriber(SpeechTranscriber):
                 )
 
     async def stop(self) -> None:
-        """Terminate AssemblyAI transcription session."""
+        """Terminate AssemblyAI v3 transcription session."""
         self._is_active = False
 
         if self._ws:
             try:
-                # AssemblyAI protocol: send terminate_session JSON
-                await self._ws.send(json.dumps({"terminate_session": True}))
+                # v3 terminate message (was {"terminate_session": true} in v2)
+                await self._ws.send(json.dumps({"type": "Terminate"}))
                 await asyncio.sleep(0.1)
                 await self._ws.close()
             except Exception as exc:
