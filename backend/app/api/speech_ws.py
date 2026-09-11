@@ -36,13 +36,12 @@ async def speech_websocket_endpoint(websocket: WebSocket):
     session_id = str(uuid.uuid4())
     transcriber = None
     agent = PeexhAgent(config=settings)
-    last_final_transcript: Optional[TranscriptEvent] = None
+    final_transcripts: list[TranscriptEvent] = []
 
     async def forward_transcript(event: TranscriptEvent):
-        nonlocal last_final_transcript
         try:
             if event.is_final:
-                last_final_transcript = event
+                final_transcripts.append(event)
             await websocket.send_text(event.model_dump_json())
         except Exception as exc:
             logger.error(f"Failed to forward transcript to client: {exc}")
@@ -63,7 +62,7 @@ async def speech_websocket_endpoint(websocket: WebSocket):
                     msg_type = data.get("type")
 
                     if msg_type == "start":
-                        last_final_transcript = None
+                        final_transcripts.clear()
                         agent.reset()
                         start_msg = StartSessionMessage.model_validate(data)
                         transcriber = get_speech_transcriber(
@@ -93,16 +92,23 @@ async def speech_websocket_endpoint(websocket: WebSocket):
                         stopped_event = SpeechStoppedEvent()
                         await websocket.send_text(stopped_event.model_dump_json())
 
-                        # Execute PEEXH agent interpretation and decision loop
-                        raw_text = (
-                            last_final_transcript.text
-                            if last_final_transcript
-                            else ""
+                        # Execute PEEXH agent interpretation and decision loop over accumulated session turns
+                        raw_text = " ".join(
+                            t.text.strip()
+                            for t in final_transcripts
+                            if t.text and t.text.strip()
                         )
+                        confidences = [
+                            t.confidence for t in final_transcripts if t.confidence > 0
+                        ]
                         stt_conf = (
-                            last_final_transcript.confidence
-                            if last_final_transcript
-                            else 0.0
+                            sum(confidences) / len(confidences)
+                            if confidences
+                            else (
+                                final_transcripts[-1].confidence
+                                if final_transcripts
+                                else 0.0
+                            )
                         )
 
                         decision = await agent.process_transcript(

@@ -25,6 +25,7 @@ class AssemblyAITranscriber(SpeechTranscriber):
         self._ws: Optional[websockets.WebSocketClientProtocol] = None
         self._receive_task: Optional[asyncio.Task] = None
         self._is_active = False
+        self._terminated_event: Optional[asyncio.Event] = None
 
     async def start(self) -> None:
         """Connect to AssemblyAI v3 Streaming WebSocket API."""
@@ -42,6 +43,7 @@ class AssemblyAITranscriber(SpeechTranscriber):
         try:
             self._ws = await websockets.connect(url, additional_headers=headers)
             self._is_active = True
+            self._terminated_event = asyncio.Event()
             self._receive_task = asyncio.create_task(self._listen_loop())
             logger.info("Connected to AssemblyAI v3 Streaming WebSocket")
         except Exception as exc:
@@ -58,7 +60,7 @@ class AssemblyAITranscriber(SpeechTranscriber):
     async def _listen_loop(self) -> None:
         """Background task receiving transcript messages from AssemblyAI v3."""
         try:
-            while self._is_active and self._ws:
+            while self._ws:
                 msg_str = await self._ws.recv()
                 data = json.loads(msg_str)
                 msg_type = data.get("type")
@@ -102,6 +104,8 @@ class AssemblyAITranscriber(SpeechTranscriber):
                 elif msg_type == "Termination":
                     # v3 session ended event (was SessionTerminated in v2)
                     logger.info("AssemblyAI v3 session terminated")
+                    if self._terminated_event:
+                        self._terminated_event.set()
                     break
 
                 elif msg_type == "Error":
@@ -115,6 +119,8 @@ class AssemblyAITranscriber(SpeechTranscriber):
                                 code="ASSEMBLYAI_UPSTREAM_ERROR",
                             )
                         )
+                    if self._terminated_event:
+                        self._terminated_event.set()
                     break
 
         except websockets.exceptions.ConnectionClosed:
@@ -128,6 +134,9 @@ class AssemblyAITranscriber(SpeechTranscriber):
                         code="ASSEMBLYAI_STREAM_ERROR",
                     )
                 )
+        finally:
+            if self._terminated_event:
+                self._terminated_event.set()
 
     async def send_audio(self, chunk: bytes) -> None:
         """Send raw binary PCM16 audio chunk directly to AssemblyAI v3."""
@@ -148,22 +157,35 @@ class AssemblyAITranscriber(SpeechTranscriber):
                 )
 
     async def stop(self) -> None:
-        """Terminate AssemblyAI v3 transcription session."""
+        """Terminate AssemblyAI v3 transcription session gracefully."""
+        if not self._is_active and self._receive_task is None:
+            return
+
         self._is_active = False
 
         if self._ws:
             try:
                 # v3 terminate message (was {"terminate_session": true} in v2)
                 await self._ws.send(json.dumps({"type": "Terminate"}))
-                await asyncio.sleep(0.1)
-                await self._ws.close()
+                if self._terminated_event:
+                    try:
+                        await asyncio.wait_for(self._terminated_event.wait(), timeout=3.0)
+                    except asyncio.TimeoutError:
+                        logger.warning("Timed out waiting for AssemblyAI Termination event")
             except Exception as exc:
-                logger.warning(f"Error while closing AssemblyAI WebSocket: {exc}")
+                logger.warning(f"Error while stopping AssemblyAI WebSocket: {exc}")
+            finally:
+                try:
+                    await self._ws.close()
+                except Exception:
+                    pass
+                self._ws = None
 
         if self._receive_task:
-            self._receive_task.cancel()
-            try:
-                await self._receive_task
-            except asyncio.CancelledError:
-                pass
+            if not self._receive_task.done():
+                self._receive_task.cancel()
+                try:
+                    await self._receive_task
+                except asyncio.CancelledError:
+                    pass
             self._receive_task = None

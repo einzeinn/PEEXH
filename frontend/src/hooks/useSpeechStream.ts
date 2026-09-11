@@ -260,12 +260,22 @@ export function useSpeechStream() {
             }));
           } else if (data.type === "transcript") {
             if (data.is_final) {
-              setState((prev) => ({
-                ...prev,
-                finalTranscript: data.text,
-                partialTranscript: "",
-                confidence: data.confidence || 0,
-              }));
+              setState((prev) => {
+                const trimmedExisting = prev.finalTranscript.trim();
+                const trimmedAddition = (data.text || "").trim();
+                const accumulated = trimmedExisting
+                  ? trimmedAddition
+                    ? `${trimmedExisting} ${trimmedAddition}`
+                    : trimmedExisting
+                  : trimmedAddition;
+
+                return {
+                  ...prev,
+                  finalTranscript: accumulated,
+                  partialTranscript: "",
+                  confidence: data.confidence || prev.confidence || 0,
+                };
+              });
             } else {
               setState((prev) => ({
                 ...prev,
