@@ -6,6 +6,10 @@ import { useSpeechStream } from "@/hooks/useSpeechStream";
 import { TapToTalkButton } from "@/components/speech/TapToTalkButton";
 import { TranscriptView } from "@/components/speech/TranscriptView";
 import { ConfirmedMessageView } from "@/components/speech/ConfirmedMessageView";
+import {
+  CommunicationHistory,
+  HistoryItem,
+} from "@/components/speech/CommunicationHistory";
 import { DemoBar } from "@/components/demo/DemoBar";
 
 interface BackendHealth {
@@ -19,6 +23,7 @@ export default function HomePage() {
   const [loadingHealth, setLoadingHealth] = useState<boolean>(true);
   const [healthError, setHealthError] = useState<string | null>(null);
   const [demoSimulating, setDemoSimulating] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const {
     status,
@@ -39,6 +44,30 @@ export default function HomePage() {
     submitCorrection,
     requestRepeat,
   } = useSpeechStream();
+
+  // Track verified messages into session history
+  useEffect(() => {
+    if (confirmationStatus === "confirmed" && confirmedPhrase) {
+      setHistory((prev) => {
+        if (prev.length > 0 && prev[0].phrase === confirmedPhrase) {
+          return prev;
+        }
+        return [
+          {
+            id: `${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+            phrase: confirmedPhrase,
+            source: confirmedSource,
+            timestamp: new Date(),
+          },
+          ...prev,
+        ];
+      });
+    }
+  }, [confirmationStatus, confirmedPhrase, confirmedSource]);
+
+  const handleClearHistory = useCallback(() => {
+    setHistory([]);
+  }, []);
 
   const checkBackendHealth = async () => {
     setLoadingHealth(true);
@@ -155,6 +184,9 @@ export default function HomePage() {
           onStop={stopRecording}
         />
       </section>
+
+      {/* Verified Communication History */}
+      <CommunicationHistory items={history} onClear={handleClearHistory} />
 
       {/* System Status and Diagnostics */}
       <section
