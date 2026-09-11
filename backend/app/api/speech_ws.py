@@ -56,6 +56,9 @@ async def speech_websocket_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive()
 
+            if message.get("type") == "websocket.disconnect":
+                break
+
             if "text" in message and message["text"]:
                 try:
                     data = json.loads(message["text"])
@@ -171,7 +174,7 @@ async def speech_websocket_endpoint(websocket: WebSocket):
                 if transcriber:
                     await transcriber.send_audio(message["bytes"])
 
-    except WebSocketDisconnect:
+    except (WebSocketDisconnect, RuntimeError):
         logger.info(f"Client disconnected from speech session {session_id}")
     except Exception as exc:
         logger.error(f"Unexpected error in speech WebSocket: {exc}")
